@@ -1,13 +1,20 @@
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
+import { useEffect, useState } from "react";
 
-const AddFoods = () => {
+const UpdateGrocery = () => {
+  const { id } = useParams();
+  const [food, setFood] = useState({});
   const { user } = useAuth();
   const navigate = useNavigate();
+  useEffect(() => {
+    getData();
+  }, []);
 
-  const handleAddGrocery = async (e) => {
+
+  const handleUpdateGrocery = async (e) => {
     e.preventDefault();
     const form = e.target;
 
@@ -19,15 +26,12 @@ const AddFoods = () => {
     const description = form.description.value;
     const email = user?.email;
 
-    if(quantity>20){
-        return toast.error('Quantity can not be more than 20');
-    }
-
     const buyer = {
       buyer_email: email,
       buyer_name: user?.displayName,
       buyer_photo: user?.photoURL,
     };
+
     const groceryData = {
       food_name,
       food_image,
@@ -39,15 +43,26 @@ const AddFoods = () => {
     };
 
     try {
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/foods`,
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/foods/update/${id}`,
         groceryData
       );
-      if (data.insertedId) {
-        toast.success("Grocery Item Added Successfully!");
-        e.target.reset();
-      }
+      toast.success("Grocery Item Added Successfully!");
+      getData()
+      navigate('/added-foods')
       //   navigate("/my-groceries");
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const { data } = await axios(
+        `${import.meta.env.VITE_API_URL}/foods/${id}`
+      );
+      // console.log(data);
+      setFood(data);
     } catch (err) {
       toast.error(err.message);
     }
@@ -57,16 +72,18 @@ const AddFoods = () => {
     <div className="flex justify-center items-center min-h-[calc(100vh-306px)] my-12">
       <section className="p-6 mx-auto bg-white rounded-md shadow-md">
         <h2 className="text-lg font-semibold text-gray-700 capitalize">
-          Add Grocery Item
+          Update Grocery Item
         </h2>
 
-        <form onSubmit={handleAddGrocery}>
+        <form onSubmit={handleUpdateGrocery}>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
             <div>
               <label className="text-gray-700" htmlFor="food_name">
                 Food Name
               </label>
-              <input required
+              <input
+                required
+                defaultValue={food?.food_name}
                 id="food_name"
                 name="food_name"
                 type="text"
@@ -78,7 +95,9 @@ const AddFoods = () => {
               <label className="text-gray-700" htmlFor="food_image">
                 Image URL
               </label>
-              <input required
+              <input
+                required
+                defaultValue={food?.food_image}
                 id="food_image"
                 name="food_image"
                 type="text"
@@ -86,28 +105,33 @@ const AddFoods = () => {
               />
             </div>
 
-            <div>
-              <label className="text-gray-700" htmlFor="food_category">
-                Category
-              </label>
-              <select required
-                name="food_category"
-                id="food_category"
-                className="block w-full px-4 py-2 mt-2 border border-gray-200 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-              >
-                <option value="Fruits">Fruits</option>
-                <option value="Vegetables">Vegetables</option>
-                <option value="Dairy">Dairy</option>
-                <option value="Others">Others</option>
-              </select>
-            </div>
+            {food?.food_category && (
+              <div>
+                <label className="text-gray-700" htmlFor="food_category">
+                  Category
+                </label>
+                <select
+                  required
+                  defaultValue={food?.food_category}
+                  name="food_category"
+                  id="food_category"
+                  className="block w-full px-4 py-2 mt-2 border border-gray-200 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                >
+                  <option value="Fruits">Fruits</option>
+                  <option value="Vegetables">Vegetables</option>
+                  <option value="Dairy">Dairy</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
+            )}
 
             <div>
               <label className="text-gray-700" htmlFor="quantity">
                 Quantity
               </label>
-              <input  required
-                defaultValue={1}
+              <input
+                defaultValue={food?.quantity}
+                required
                 id="quantity"
                 name="quantity"
                 type="number"
@@ -121,7 +145,9 @@ const AddFoods = () => {
               <label className="text-gray-700" htmlFor="price">
                 Price ($)
               </label>
-              <input required
+              <input
+                defaultValue={food?.price}
+                required
                 id="price"
                 name="price"
                 type="text"
@@ -133,11 +159,12 @@ const AddFoods = () => {
               <label className="text-gray-700" htmlFor="email">
                 Buyer Email
               </label>
-              <input required
+              <input
+                readOnly
                 id="email"
                 name="email"
                 type="email"
-                defaultValue={user?.email}
+                defaultValue={food?.buyer?.buyer_email}
                 disabled
                 className="block w-full px-4 py-2 mt-2 bg-gray-100 border border-gray-200 rounded-md"
               />
@@ -148,7 +175,9 @@ const AddFoods = () => {
             <label className="text-gray-700" htmlFor="description">
               Description
             </label>
-            <textarea required
+            <textarea
+              defaultValue={food?.description}
+              required
               name="description"
               id="description"
               rows="4"
@@ -161,7 +190,7 @@ const AddFoods = () => {
               type="submit"
               className="px-8 py-2.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
             >
-              Add Item
+              Update Item
             </button>
           </div>
         </form>
@@ -170,4 +199,4 @@ const AddFoods = () => {
   );
 };
 
-export default AddFoods;
+export default UpdateGrocery;

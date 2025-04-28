@@ -11,11 +11,14 @@ import SingleFood from "../Pages/SingleFood";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import PrivateRoute from "./PrivateRoute";
+import UpdateGrocery from "../Pages/UpdateGrocery";
+import ErrorPage from "../Pages/ErrorPage";
 
 const router=createBrowserRouter([
     {
         path:'/',
         element:<Root></Root>,
+        errorElement:<ErrorPage></ErrorPage>,
         children:[
             {
                 index:true,
@@ -42,12 +45,16 @@ const router=createBrowserRouter([
                 element:<PrivateRoute><AddFoods></AddFoods></PrivateRoute>
             },
             {
-                path:'/food-purchase',
+                path:'/foods-purchase/:id',
                 element:<PrivateRoute><FoodPurchase></FoodPurchase></PrivateRoute>
             },
             {
-                path:'/single-food',
+                path:'/foods/:id',
                 element:<PrivateRoute><SingleFood></SingleFood></PrivateRoute>
+            },
+            {
+                path:'/foods/update/:id',
+                element:<PrivateRoute><UpdateGrocery></UpdateGrocery></PrivateRoute>
             },
             {
                 path:'/login',
