@@ -1,12 +1,30 @@
-import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import useAuth from "../Hooks/useAuth";
 import { Link } from "react-router-dom";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Review = () => {
   const [sent, isSent] = useState(false);
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const queryClient=useQueryClient();
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async ({ review }) => {
+      try {
+        await axiosSecure.post(`/reviews`, review);
+      } catch (err) {
+        toast.error(err.message);
+      }
+    },
+    onSuccess: () => {
+      toast.success("Message has been sent!");
+      isSent(true);
+      queryClient.invalidateQueries({queryKey:['reviews']})
+    },
+  });
 
   const handleReview = async (e) => {
     e.preventDefault();
@@ -20,19 +38,8 @@ const Review = () => {
     const review = { user_name, user_email, user_photo, message };
     console.log(review);
 
-    try {
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/reviews`,
-        review
-      );
-      if (data) {
-        toast.success("Message has been sent!");
-        isSent(true);
-        e.target.reset();
-      }
-    } catch (err) {
-      toast.error(err.message);
-    }
+    await mutateAsync({ review });
+    e.target.reset();
   };
   return (
     <section className="flex items-center flex-1 my-10 container mx-auto">
@@ -92,7 +99,7 @@ const Review = () => {
               disabled={sent}
               className="px-6 py-3 w-full  text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:bg-blue-600 focus:outline-none sm:mx-2"
             >
-              {sent ? "Sent!" : "Notify Me"}
+              {sent ? "Sent!" : "Send"}
             </button>
           </div>
         </form>

@@ -3,8 +3,9 @@ import "../styles/ShowReviews.css";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
-const CustomLeftArrow = ({ onClick,hovered }) => (
+const CustomLeftArrow = ({ onClick, hovered }) => (
   <button
     onClick={onClick}
     className={`
@@ -31,13 +32,13 @@ const CustomLeftArrow = ({ onClick,hovered }) => (
   </button>
 );
 
-const CustomRightArrow = ({ onClick,hovered }) => (
+const CustomRightArrow = ({ onClick, hovered }) => (
   <button
     onClick={onClick}
     className={`
         absolute bottom-35 right-[40%] transform -translate-y-1/2 
         bg-white text-blue-600 p-2 rounded-full z-10 
-        transition-all duration-500 ease-in-out
+        transition-all duration-500 ease-in-out cursor-pointer
         ${hovered ? "right-4 opacity-100" : "-right-20 opacity-0"}
       `}
   >
@@ -62,8 +63,8 @@ const CustomRightArrow = ({ onClick,hovered }) => (
 //   <button
 //     onClick={onClick}
 //     className={`
-//         absolute top-1/2 transform -translate-y-1/2 
-//         bg-blue-600 text-white p-2 rounded-full z-10 
+//         absolute top-1/2 transform -translate-y-1/2
+//         bg-blue-600 text-white p-2 rounded-full z-10
 //         transition-all duration-500 ease-in-out cursor-pointer
 //         ${hovered ? "left-4 opacity-100" : "-left-12 opacity-0"}
 //       `}
@@ -89,8 +90,8 @@ const CustomRightArrow = ({ onClick,hovered }) => (
 //   <button
 //     onClick={onClick}
 //     className={`
-//         absolute top-1/2 transform -translate-y-1/2 
-//         bg-blue-600 text-white p-2 rounded-full z-10 
+//         absolute top-1/2 transform -translate-y-1/2
+//         bg-blue-600 text-white p-2 rounded-full z-10
 //         transition-all duration-500 ease-in-out
 //         ${hovered ? "right-4 opacity-100" : "-right-12 opacity-0"}
 //       `}
@@ -113,17 +114,32 @@ const CustomRightArrow = ({ onClick,hovered }) => (
 // );
 
 const ShowReviews = () => {
-  const [reviews, setReviews] = useState([]);
-  const [hovered, setHovered]=useState(false);
+  // const [reviews, setReviews] = useState([]);
+  const [hovered, setHovered] = useState(false);
 
   const getData = async () => {
     const { data } = await axios(`${import.meta.env.VITE_API_URL}/reviews`);
-    setReviews(data);
+    // setReviews(data);
+    return data;
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
+  const {
+    data: reviews = [],
+    isError,
+    refetch,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["reviews"],
+    queryFn: getData,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
   return (
     <div
       className="relative container mx-auto"
@@ -134,10 +150,10 @@ const ShowReviews = () => {
         additionalTransfrom={0}
         centerMode={false}
         arrows
-        customLeftArrow={<CustomLeftArrow  hovered={hovered}/>}
-        customRightArrow={<CustomRightArrow hovered={hovered}/>}
+        customLeftArrow={<CustomLeftArrow hovered={hovered} />}
+        customRightArrow={<CustomRightArrow hovered={hovered} />}
         autoPlay
-        autoPlaySpeed={5000}
+        autoPlaySpeed={7000}
         containerClass="container"
         dotListClass=""
         draggable

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import useAuth from "../Hooks/useAuth";
 import toast from "react-hot-toast";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 const Register = () => {
-  const { signInWithGoogle, createUser, updateUserProfile, setUser } =
+  const { signInWithGoogle, createUser, updateUserProfile, setUser, user, loading } =
     useAuth();
   const [passError, setPassError] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -51,6 +51,10 @@ const Register = () => {
       toast.error(err.message);
     }
   };
+  console.log(from);
+
+  if (user) return <Navigate to={from} replace />;
+  if (loading) return <div className="text-center py-8">Loading...</div>;
   return (
     <div>
       <div className="bg-white dark:bg-gray-900">

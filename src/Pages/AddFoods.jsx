@@ -1,12 +1,14 @@
-import axios from "axios";
+
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 const AddFoods = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const axiosSecure=useAxiosSecure();
   const handleAddGrocery = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -39,15 +41,15 @@ const AddFoods = () => {
     };
 
     try {
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/foods`,
+      const { data } = await axiosSecure.post(
+        `/foods`,
         groceryData
       );
       if (data.insertedId) {
         toast.success("Grocery Item Added Successfully!");
         e.target.reset();
       }
-      //   navigate("/my-groceries");
+        navigate("/added-foods");
     } catch (err) {
       toast.error(err.message);
     }

@@ -5,10 +5,12 @@ import { GoTrash } from "react-icons/go";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { MdOutlineSystemUpdateAlt } from "react-icons/md";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 const FoodOrdersRequest = () => {
   const { user } = useAuth();
   const [foods, setFoods] = useState([]);
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     getData();
@@ -17,24 +19,24 @@ const FoodOrdersRequest = () => {
   const handleStatus = async (id, orderStatus) => {
     const status = { orderStatus };
     try {
-      const { data } = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/orders/status?id=${id}`,
+      const { data } = await axiosSecure.patch(
+        `/orders/status?id=${id}`,
         status
       );
-      toast.success("Successfully updated the status");
-      // ui refresh
-      getData();
-      console.log(data);
+      if (data) {
+        toast.success("Successfully updated the status");
+        // ui refresh
+        getData();
+        // console.log(data);
+      }
     } catch (err) {
       toast.error(err.message);
     }
   };
 
   const getData = async () => {
-    const { data } = await axios(
-      `${import.meta.env.VITE_API_URL}/orders-request?email=${user?.email}`
-    );
-    console.log(data);
+    const { data } = await axiosSecure(`/orders-request?email=${user?.email}`);
+    // console.log(data);
     setFoods(data);
   };
   return (

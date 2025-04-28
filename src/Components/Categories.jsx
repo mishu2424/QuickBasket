@@ -5,7 +5,7 @@ import "react-tabs/style/react-tabs.css";
 import FoodCard from "./FoodCard";
 
 const Categories = () => {
-  const [tablistName, setTablistName]=useState('');
+  const [tablistName, setTablistName]=useState('Fruits');
   const [foods, setFoods] = useState([]);
   useEffect(() => {
     getData();

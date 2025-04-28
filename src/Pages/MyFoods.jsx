@@ -1,17 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import useAuth from "../Hooks/useAuth";
-import axios from "axios";
 import { GoTrash } from "react-icons/go";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { IoPencilOutline } from "react-icons/io5";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 const MyFoods = () => {
   const { user } = useAuth();
   const [foods, setFoods] = useState([]);
   const [selectedFood, setSelectedFood] = useState(null); // selected food for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const axiosSecure=useAxiosSecure();
 
   const dialogRef = useRef();
 
@@ -24,7 +26,7 @@ const MyFoods = () => {
   const handleDelete = async (id) => {
     // console.log(id);
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/foods/${id}`);
+      await axiosSecure.delete(`/foods/${id}`);
       getData();
     } catch (err) {
       toast.error(err.message);
@@ -32,12 +34,14 @@ const MyFoods = () => {
   };
 
   const getData = async () => {
-    const { data } = await axios(
-      `${import.meta.env.VITE_API_URL}/foods?email=${user?.email}`
+    const { data } = await axiosSecure(
+      `/foods?email=${user?.email}`
     );
     console.log(data);
     setFoods(data);
+    // return data;
   };
+
 
   const handleEditClick = (food) => {
     console.log("clicked");
@@ -48,6 +52,7 @@ const MyFoods = () => {
       dialogRef.current?.showModal();
     }, 0);
   };
+  
 
   const closeModal = () => {
     dialogRef.current?.close();
@@ -85,8 +90,8 @@ const MyFoods = () => {
     console.log(id, groceryData);
 
     try {
-      await axios.put(
-        `${import.meta.env.VITE_API_URL}/foods/update/${id}`,
+      await axiosSecure.put(
+        `/foods/update/${id}`,
         groceryData
       );
       toast.success("Grocery Item Added Successfully!");
@@ -101,6 +106,15 @@ const MyFoods = () => {
       toast.error(err.message);
     }
   };
+
+  // if (isPending || isLoading) {
+  //   return <span>Data is Loading...</span>
+  // }
+
+  // if(isError || error){
+  //   return <span>Error: {error.message}</span>;
+  // }
+
   return (
     <section className="container px-4 mx-auto my-5">
       <div className="flex items-center gap-x-3">
@@ -325,7 +339,7 @@ const MyFoods = () => {
                                           id="quantity"
                                           name="quantity"
                                           type="number"
-                                          min="1"
+                                          min="0"
                                           step="1"
                                           className="block w-full px-4 py-2 mt-2 border border-gray-200 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
                                         />

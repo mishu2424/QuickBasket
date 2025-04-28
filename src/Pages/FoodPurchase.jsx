@@ -112,7 +112,7 @@ const FoodPurchase = () => {
             </p>
 
             <span className="text-sm">Quantity: {food.quantity}</span>
-
+            {food?.quantity===0 && <span className="text-xs text-rose-500 bg-red-100/50 rounded-full px-2 py-1 ml-2">Not available</span>}
             <div className="flex items-center mt-6">
               <img
                 className="object-cover object-center w-10 h-10 rounded-full"
@@ -194,6 +194,7 @@ const FoodPurchase = () => {
                 </div>
               </div>
               <input
+                disabled={food?.quantity===0}
                 type="submit"
                 value={"Purchase"}
                 className="btn w-full mt-3 bg-blue-500 text-white"

@@ -1,14 +1,22 @@
-import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import login from "../assets/images/loginImg.jpg";
 import useAuth from "../Hooks/useAuth";
 import toast from "react-hot-toast";
+
 const Login = () => {
-  const { signInWithGoogle, signIn } = useAuth();
-  const location=useLocation();
-  const navigate=useNavigate();
-  const from=location.state || '/';
+  const { signInWithGoogle, signIn, user, loading } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state || "/";
+
+  // to redirect user to home when logged in
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate("/");
+  //   }
+  // }, [user]);
 
   const handleUserSignIn = async (e) => {
     e.preventDefault();
@@ -32,6 +40,9 @@ const Login = () => {
       toast.error(err.message);
     }
   };
+
+  if (user) return <Navigate to={from} replace />;
+  if (loading) return <div className="text-center py-8">Loading...</div>;
   return (
     <div>
       <div className="bg-white dark:bg-gray-900 my-2">

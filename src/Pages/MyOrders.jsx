@@ -4,9 +4,11 @@ import axios from "axios";
 import { GoTrash } from "react-icons/go";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 const MyOrders = () => {
   const { user } = useAuth();
+  const axiosSecure=useAxiosSecure();
   const [foods, setFoods] = useState([]);
 
   useEffect(() => {
@@ -17,8 +19,8 @@ const MyOrders = () => {
     // console.log(id,orderStatus);
     const status = { orderStatus };
     try {
-      const { data } = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/orders/status?id=${id}`,
+      const { data } = await axiosSecure.patch(
+        `/orders/status?id=${id}`,
         status
       );
       toast.success("Successfully updated the status");
@@ -31,8 +33,8 @@ const MyOrders = () => {
   };
 
   const getData = async () => {
-    const { data } = await axios(
-      `${import.meta.env.VITE_API_URL}/orders?email=${user?.email}`
+    const { data } = await axiosSecure(
+      `/orders?email=${user?.email}`
     );
     console.log(data);
     setFoods(data);
@@ -162,15 +164,21 @@ const MyOrders = () => {
                       <td className="px-4 py-4 text-sm whitespace-nowrap">
                         <div className="flex items-center gap-x-6">
                           <button
-                          disabled={food?.status==='In progress' || food?.status==='Completed'}
+                            disabled={
+                              food?.status === "In progress" ||
+                              food?.status === "Completed"
+                            }
                             onClick={() => handleStatus(food._id, "Cancelled")}
                             className="text-gray-500 cursor-pointer transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none"
                           >
                             {/* Trash icon */}
                             <GoTrash />
                           </button>
-                          <button disabled={food?.status!=='In progress'} onClick={() => handleStatus(food._id, "Completed")} className="text-gray-500 cursor-pointer transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
-                            
+                          <button
+                            disabled={food?.status !== "In progress"}
+                            onClick={() => handleStatus(food._id, "Completed")}
+                            className="text-gray-500 cursor-pointer transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none"
+                          >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
