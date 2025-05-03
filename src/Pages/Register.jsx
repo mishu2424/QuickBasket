@@ -54,7 +54,7 @@ const Register = () => {
   console.log(from);
 
   if (user) return <Navigate to={from} replace />;
-  if (loading) return <div className="text-center py-8">Loading...</div>;
+  // if (loading) return <div className="text-center py-8">Loading...</div>;
   return (
     <div>
       <div className="bg-white dark:bg-gray-900">

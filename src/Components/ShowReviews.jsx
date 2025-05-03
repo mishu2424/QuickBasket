@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 const CustomLeftArrow = ({ onClick, hovered }) => (
   <button
     onClick={onClick}
-    className={`
+    className={`hidden lg:flex
         absolute bottom-35 right-[45%] transform -translate-y-1/2 
         bg-white text-blue-600  p-2 rounded-full z-10 
         transition-all duration-500 ease-in-out cursor-pointer
@@ -35,7 +35,7 @@ const CustomLeftArrow = ({ onClick, hovered }) => (
 const CustomRightArrow = ({ onClick, hovered }) => (
   <button
     onClick={onClick}
-    className={`
+    className={`hidden lg:flex
         absolute bottom-35 right-[40%] transform -translate-y-1/2 
         bg-white text-blue-600 p-2 rounded-full z-10 
         transition-all duration-500 ease-in-out cursor-pointer

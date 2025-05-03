@@ -85,7 +85,7 @@ const Review = () => {
             placeholder="Review"
             className="block mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border bg-white px-4 h-32 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
           ></textarea>
-          <div className="grid grid-cols-1 lg:grid-cols-2 mt-3">
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 mt-3">
             <input
               required
               readOnly
@@ -97,7 +97,7 @@ const Review = () => {
             />
             <button
               disabled={sent}
-              className="px-6 py-3 w-full  text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:bg-blue-600 focus:outline-none sm:mx-2"
+              className="px-6 py-3 w-full  text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:bg-blue-600 focus:outline-none "
             >
               {sent ? "Sent!" : "Send"}
             </button>

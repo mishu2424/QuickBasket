@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import FoodCard from "./FoodCard";
-
+import moment from "moment/moment";
 const Categories = () => {
   const [tablistName, setTablistName]=useState('Fruits');
   const [foods, setFoods] = useState([]);
+  const [time, setTime] = useState(null);
   useEffect(() => {
     getData();
   }, []);
@@ -16,8 +17,13 @@ const Categories = () => {
     // console.log(data);
     setFoods(data);
   };
+
+  setInterval(() => {
+    setTime(moment().format("dddd, ll, h:mm:ss"));
+  }, 1000);
   return (
     <div className="container mx-auto">
+      {time && <h3 className="text-xs md:hidden flex w-fit mx-auto my-3">{time}</h3>}
       <Tabs>
         <div className="flex items-center justify-center">
           <TabList>
