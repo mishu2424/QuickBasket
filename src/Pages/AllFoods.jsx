@@ -9,7 +9,7 @@ const AllFoods = () => {
   const [count, setCount] = useState(0);
   const [category, setCategory] = useState("");
   const [searchText, setSearchText] = useState("");
-  const [sort, setSort]=useState('');
+  const [sort, setSort] = useState("");
   const axiosSecure = useAxiosSecure();
 
   const getData = async () => {
@@ -35,7 +35,7 @@ const AllFoods = () => {
     };
 
     getCount();
-  }, [category,searchText]);
+  }, [category, searchText]);
   // console.log(count);
 
   const handleCategoryChange = (e) => {
@@ -51,10 +51,10 @@ const AllFoods = () => {
     e.target.reset();
   };
 
-  const handleSort=(e)=>{
+  const handleSort = (e) => {
     console.log(e.target.value);
     setSort(e.target.value);
-  }
+  };
 
   const totalPages = Math.ceil(count / itemsPerPage);
   const pages = [...Array(totalPages).keys()].map((element) => element + 1);
@@ -100,6 +100,10 @@ const AllFoods = () => {
                     </g>
                   </svg>
                   <input
+                    onChange={(e) => {
+                      setSearchText(e.target.value);
+                      setCurrentPage(1);
+                    }}
                     defaultValue={searchText && searchText}
                     type="text"
                     name="search"
@@ -119,7 +123,7 @@ const AllFoods = () => {
             {/* Sort By */}
             <div className="flex-1 min-w-[200px]">
               <select
-              value={sort}
+                value={sort}
                 name="sort"
                 onChange={(e) => handleSort(e)}
                 className="select border border-gray-300 text-gray-700 bg-white dark:bg-gray-900 dark:text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -136,8 +140,8 @@ const AllFoods = () => {
                 onClick={() => {
                   setCurrentPage(1);
                   setCategory("");
-                  setSearchText('');
-                  setSort('');
+                  setSearchText("");
+                  setSort("");
                 }}
                 className="w-full px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
               >
@@ -150,7 +154,11 @@ const AllFoods = () => {
               ))}
             </div>
           </div>
-            {!foods.length && <div><span>No match!!!</span></div>}
+          {!foods.length && (
+            <div>
+              <span>No match!!!</span>
+            </div>
+          )}
         </div>
         <div className="flex justify-center mt-12">
           <button

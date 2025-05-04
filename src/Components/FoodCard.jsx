@@ -14,7 +14,7 @@ const FoodCard = ({ food }) => {
         data-tooltip-id="my-tooltip"
         data-tooltip-content="Click to see details"
         data-tooltip-place="top"
-        className="md:max-w-xs overflow-hidden relative bg-white rounded-lg shadow-lg dark:bg-gray-800 h-[356px] cursor-pointer hover:scale-105 duration-300"
+        className="flex flex-col md:max-w-xs overflow-hidden relative bg-white rounded-lg shadow-lg dark:bg-gray-800 h-[356px] cursor-pointer hover:scale-105 duration-300"
       >
         <span
           className={`absolute top-20 right-2 px-3 py-1 text-xs ${
@@ -33,7 +33,7 @@ const FoodCard = ({ food }) => {
         >
           {food_category}
         </span>
-        <div className="px-4 py-3 mt-5">
+        <div className="px-4 py-3 mt-5 grow">
           <div className="flex items-center justify-between">
             <h1 className="text-base font-bold text-gray-800 uppercase dark:text-white">
               {food_name}
