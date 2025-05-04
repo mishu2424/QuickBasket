@@ -1,12 +1,21 @@
 # React + Vite
+# QuickBasket
+# Frontend
+```
+1.Firebase was used for authentication.
+2.React moment js has been used on navbar.
+3.Date fns has been used to keep update information.
+4.React swiper has been used in banner section.
+5.Lottie react was used for animation.
+6.React tab list was used for food category.
+7.Meraki UI was used for components.
+8.Tailwind, daisy UI were also used to achieve realistic components.
+9.Axios was used for fetching API. 
+```
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# Backend
+```
+1.Express JS has been used for backend.
+2.JWT token was used for http cookie.
+3.MongoDB was used for storing database.
+```
